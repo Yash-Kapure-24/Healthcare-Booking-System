@@ -113,7 +113,7 @@ const Doctors = () => {
                 onClick={() => navigate(`/appointment/${doctor._id}`)}
                 className='border border-gray-200 rounded-2xl shadow-lg bg-white overflow-hidden 
                    cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 
-                   w-full h-full flex flex-col'
+                   w-full h-85 flex flex-col'
               >
                 {/* Doctor Image */}
                 <div className='bg-blue-50 p-6 flex justify-center'>

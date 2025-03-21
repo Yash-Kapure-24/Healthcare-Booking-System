@@ -21,14 +21,21 @@ const AddDoctor = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
+  
+    if (!docImg) {
+      return toast.error("Please upload doctor image");
+    }
+  
+    if (!name || !email || !password || !degree || !address1 || !address2 || !about) {
+      return toast.error("Please fill in all the required fields.");
+    }
+  
+    if (isNaN(fees) || fees <= 0) {
+      return toast.error("Please enter valid fees.");
+    }
+  
     try {
-      if (!docImg) {
-        return toast.error("Please upload doctor image");
-      }
-
       const formData = new FormData();
-
       formData.append("image", docImg);
       formData.append("name", name);
       formData.append("email", email);
@@ -37,33 +44,39 @@ const AddDoctor = () => {
       formData.append("fees", Number(fees));
       formData.append("speciality", speciality);
       formData.append("degree", degree);
-      formData.append(
-        "address",
-        JSON.stringify({ line1: address1, line2: address2 })
-      );
+      formData.append("address", JSON.stringify({ line1: address1, line2: address2 }));
       formData.append("about", about);
-
-      // console log form data
-
+  
       formData.forEach((value, key) => {
         console.log(`${key} : ${value}`);
       });
-
+  
       const { data } = await axios.post(
-        backendUrl + "/api/admin/add-doctor",
+        `${backendUrl}/api/admin/add-doctor`,
         formData,
         { headers: { aToken: aToken } }
       );
-
+  
       if (data.success) {
         toast.success(data.message);
+        setDocImg(false);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setFees("");
+        setDegree("");
+        setAddress1("");
+        setAddress2("");
+        setAbout("");
       } else {
         toast.error(data.message);
       }
-
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.error(error);
+    }
   };
-
+  
   return (
     <form onSubmit={onSubmitHandler} className='m-5 w-full'>
       <p className='mb-3 text-lg font-medium'>Add Doctor</p>
